@@ -11,7 +11,7 @@
   },
   "scripts": {
     "dev": "wxt",
-    "dev:firefox": "wxt -b firefox",
+    "dev:firefox": "mkdir -p .wxt/tmp && TMPDIR=\"$PWD/.wxt/tmp\" wxt -b firefox",
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
     "zip": "wxt zip",

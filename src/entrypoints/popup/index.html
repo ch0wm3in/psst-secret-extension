@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>psst-secret</title>
+    <link rel="stylesheet" href="~/assets/style.css" />
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <main>
+      <header class="row">
+        <h1>psst-secret</h1>
+        <span id="account" class="muted"></span>
+        <button id="open-settings" type="button" title="Settings">Settings</button>
+      </header>
+
+      <p id="setup" class="error" hidden></p>
+
+      <nav id="tabs" class="tabs" role="tablist">
+        <button type="button" role="tab" data-tab="send">Send</button>
+        <button type="button" role="tab" data-tab="request">Request</button>
+        <button type="button" role="tab" data-tab="reveal">Reveal</button>
+      </nav>
+
+      <section id="tab-send" data-panel="send" hidden>
+        <form id="send-form" class="panel">
+          <label>
+            Secret
+            <textarea id="send-text" autocomplete="off" spellcheck="false" required></textarea>
+          </label>
+          <div class="row">
+            <label>Expires after <select id="send-expiry" data-expiry></select></label>
+            <label>Views <select id="send-views" data-views></select></label>
+          </div>
+          <label>
+            Password (optional)
+            <input id="send-password" type="password" autocomplete="new-password" />
+          </label>
+          <button class="primary" type="submit">Encrypt and create link</button>
+          <p class="error" data-error hidden></p>
+        </form>
+        <div id="send-result" class="panel" hidden>
+          <label>Share this link <input id="send-link" readonly /></label>
+          <div class="row">
+            <button type="button" class="primary" data-copy="send-link">Copy</button>
+            <button type="button" data-reset="send">New whisper</button>
+          </div>
+          <p id="send-password-note" class="warning" hidden>
+            The link does not contain the password. Share the password through a different channel.
+          </p>
+        </div>
+      </section>
+
+      <section id="tab-request" data-panel="request" hidden>
+        <form id="request-form" class="panel">
+          <p class="muted">
+            Ask someone to send you a secret. They open the submit link, and only your view link can decrypt what they
+            send.
+          </p>
+          <div class="row">
+            <label>Expires after <select id="request-expiry" data-expiry></select></label>
+            <label>Views <select id="request-views" data-views></select></label>
+          </div>
+          <label>
+            Password (optional)
+            <input id="request-password" type="password" autocomplete="new-password" />
+          </label>
+          <button class="primary" type="submit">Create request</button>
+          <p class="error" data-error hidden></p>
+        </form>
+        <div id="request-result" class="panel" hidden>
+          <label>Submit link (send to the other person) <input id="request-submit-link" readonly /></label>
+          <button type="button" data-copy="request-submit-link">Copy submit link</button>
+          <label>View link (keep this yourself) <input id="request-view-link" readonly /></label>
+          <button type="button" data-copy="request-view-link">Copy view link</button>
+          <p class="warning">Save the view link now. It holds the key and cannot be shown again.</p>
+          <p id="request-expires" class="muted"></p>
+          <button type="button" data-reset="request">New request</button>
+        </div>
+      </section>
+
+      <section id="tab-reveal" data-panel="reveal" hidden>
+        <form id="reveal-form" class="panel">
+          <label>
+            View link
+            <input id="reveal-link" type="password" autocomplete="off" spellcheck="false" required />
+          </label>
+          <p class="muted">Revealing uses up a view. Burn-after-read whispers are deleted afterwards.</p>
+          <button class="primary" type="submit">Reveal</button>
+          <p class="error" data-error hidden></p>
+        </form>
+        <form id="reveal-password-form" class="panel" hidden>
+          <label>
+            This whisper is password-protected
+            <input id="reveal-password" type="password" autocomplete="off" required />
+          </label>
+          <button class="primary" type="submit">Decrypt</button>
+          <p class="error" data-error hidden></p>
+        </form>
+        <div id="reveal-result" class="panel" hidden>
+          <div id="reveal-text-block" hidden>
+            <label>Secret <textarea id="reveal-text" readonly spellcheck="false"></textarea></label>
+            <button type="button" class="primary" data-copy="reveal-text">Copy</button>
+          </div>
+          <ul id="reveal-files" class="files" hidden></ul>
+          <p id="reveal-views" class="warning"></p>
+          <button type="button" data-reset="reveal">Reveal another</button>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>psst-secret settings</title>
+    <meta name="manifest.open_in_tab" content="true" />
+    <link rel="stylesheet" href="~/assets/style.css" />
+    <style>
+      main {
+        max-width: 560px;
+        margin: 24px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>psst-secret settings</h1>
+
+      <form id="server-form" class="panel">
+        <label>
+          Server URL
+          <input id="server" type="url" placeholder="https://psst.example.com" required />
+        </label>
+        <p class="muted">The extension only talks to this server, and asks your browser for access to it.</p>
+        <button class="primary" type="submit">Save</button>
+        <p class="error" data-error hidden></p>
+        <p id="server-status" class="muted" hidden></p>
+      </form>
+
+      <form id="account-form" class="panel" hidden>
+        <p id="account-status" class="muted"></p>
+        <button id="sign-in" class="primary" type="submit">Sign in</button>
+        <button id="sign-out" type="button" hidden>Sign out</button>
+        <p class="error" data-error hidden></p>
+        <p class="muted">
+          Sign-in opens your server's login page. The server administrator must add this redirect URI to
+          <code>PSST_API_TOKEN_EXTENSION_REDIRECT_URIS</code>:
+          <code id="redirect-uri"></code>
+        </p>
+      </form>
+
+      <form id="defaults-form" class="panel">
+        <div class="row">
+          <label>Default expiry <select id="default-expiry" data-expiry></select></label>
+          <label>Default views <select id="default-views" data-views></select></label>
+        </div>
+        <button type="submit">Save defaults</button>
+        <p class="error" data-error hidden></p>
+      </form>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "name": "psst-secret-extension",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Browser extension for psst-secret: share and reveal end-to-end encrypted whispers",
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ch0wm3in/psst-secret-extension.git"
+  },
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "test": "vitest run",
+    "test:integration": "vitest run test/integration",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "@psst-secret/crypto": "1.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0",
+    "web-ext": "10.8.0",
+    "wxt": "0.21.5"
+  }
+}

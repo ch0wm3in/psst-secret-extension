@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Type check, unit tests, spec vectors and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run compile
+      - run: npm test
+      - run: npm run build
+      - run: npm run build:firefox
+
+  integration:
+    name: Integration (ghcr.io/ch0wm3in/psst-secret)
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE_FILE: test/integration/docker-compose.yml
+      PSST_TEST_SERVER: http://127.0.0.1:18000
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Start psst-secret
+        run: |
+          docker compose up -d
+          for _ in $(seq 1 60); do
+            curl -fsS "$PSST_TEST_SERVER/api/v1/info" && exit 0
+            sleep 2
+          done
+          docker compose logs
+          exit 1
+      - run: npm run test:integration
+      - name: Server logs
+        if: failure()
+        run: docker compose logs
